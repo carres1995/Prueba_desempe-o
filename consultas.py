@@ -1,5 +1,6 @@
 from datetime import datetime
-from gestion_inv import crear_id, mostrar, inventario
+from gestion_inv import crear_id, mostrar, inventario, validar_numero
+from typing import Dict, List
 
 sales=[
     {
@@ -69,11 +70,11 @@ def registro_venta():
     global inventario
     mostrar()
     
-    id_inv=int(input("Enter ID: "))
+    id_inv=(validar_numero("Enter ID: "))
     cliente=input("client name: ") 
-    cantidad=int(input("Amount: "))
+    cantidad=(validar_numero("Amount: "))
     fecha=datetime.now().strftime("%Y-%m-%d")
-    descuento=int(input("discount applied:"))
+    descuento=(validar_numero("discount applied:"))
     
     for i in inventario:
         if i["id"]==id_inv:
@@ -111,40 +112,41 @@ def consult_sale():
     global sales
     if not sales:
         print("Empty list")
-    number=int(input("Enter id: "))
+    number=(validar_numero("Enter id: "))
     for i in sales:
         if i["id"] == number:
             print(f"ID: {i["id"]} | cliente: {i["cliente"]} | tipo cliente: {i["tipo_cliente"]} | producto: {i["producto"]} | total: {i["total_descuento"]} | cantidad: {i["cantidad"]} | fecha: {i["fecha"]}")   
 
-def reports_top():
-    global sales
-    global inventario
+
+
+def reports_top(n: int = 3) -> List[tuple]:
+    """Devuelve los n productos más vendidos (unidades)."""
     if not sales:
         print("Empty list")
-        return None
-    count = {}
-    
+        return []
 
+    count: Dict[str, int] = {}
+    for item in sales:
+        count[item["producto"]] = count.get(item["producto"], 0) + item["cantidad"]
+
+    ranking = sorted(count.items(), key=lambda x: x[1], reverse=True)[:n]
+
+    print("Best sellers:")
+    for prod, qty in ranking:
+        print(f"  {prod}: {qty} u.")
+    return ranking
+
+
+def reports_sales() -> Dict[str, float]:
+    totales: Dict[str, float] = {}
     for i in sales:
-        count[i["producto"]] = count.get(i["producto"], 0) + i["cantidad"]
-        
+        prod = i["producto"]
+        totales[prod] = totales.get(prod, 0.0) + i["total_descuento"]
+
+    print("Sales by product:")
+    for prod, total in totales.items():
+        print(f"  {prod}: ${total:,.2f}")
     
-
-    ranking = sorted(count.items(), key=lambda x: x[1], reverse=True)
-
-    print(f"Best sellers {ranking[0:3]}")
-
-
-def reports_sales():
-    totales = {}
-
-    for e in sales:
-        s = next(p["titulo"] for p in inventario if p["titulo"] == e["producto"])
-        totales[s] = totales.get(s, 0) + e["total_descuento"]
-
-        for e, total in totales.items():
-            total
-        print(f"{s}: ${total}")
 
 def reports_income():
 

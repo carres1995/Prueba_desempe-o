@@ -45,19 +45,16 @@ inventario=[
 ]
 
 """"""
-"""def validar_numero(texto, tipo=float):
-    
+def validar_numero(texto, tipo=float):
+    while True:
         try:
-            if tipo > 0:
-                valor = tipo(input(texto))
-                return valor
-            print("numero invalido")    
             
-
-        except TypeError as e:
-            print(f"tipo de valor invalido {e}") 
+            valor = tipo(input(texto))
+            if valor > 0:
+                return valor
+            print("invalid number")    
         except ValueError as e:
-            print("debe ser numerico")  """       
+            print("It Must be numeric")         
 
 def crear_id():
     return max((int(item["id"]) for item in inventario), default=0) + 1
@@ -69,8 +66,8 @@ def registrar_inventario():
         titulo=input("Nombre: ") 
         autor=input("autor: ")
         categoria=input("tipo libro: ")
-        precio=float(input("precio: "))
-        cantidad=int(input("cantidad: "))
+        precio=(validar_numero("precio: "))
+        cantidad=(validar_numero("cantidad: "))
     except ValueError:
         print("no se admiten datos vacios.")
 
@@ -91,7 +88,7 @@ def registrar_inventario():
 
 
 def consultar():
-    id_con=int(input("Enter id: "))
+    id_con=(validar_numero("Enter id: "))
     if not inventario:
          print("Empty list")
     for i in inventario:
@@ -105,21 +102,21 @@ def consultar():
 def mostrar():
     global inventario
     for i in inventario:
-        print(f"ID: {i["id"]} | titulo: {i["titulo"]} | autor: {i["autor"]} | categoria: {i["categoria"]} | precio: {i["precio"]} | cantidad stock: {i["cantidad"]}")               
+        print(f"ID: {i["id"]:5} | titulo: {i["titulo"]:20} | autor: {i["autor"]:15} | categoria: {i["categoria"]:12} | precio: {i["precio"]:8} | cantidad stock: {i["cantidad"]:8}")               
 
 def actualizar_producto():
     global inventario
     mostrar()
-    id_act = int(input("ID a actualizar: "))
+    id_act = (validar_numero("ID update: "))
 
     
     for inv in inventario:
         if inv["id"] == id_act:
-            nuevo_titulo = input(f"titulo ({inv["titulo"]}): ") or inv["titulo"]
-            nueva_autor= input(f"autor ({inv["autor"]}): ") or inv["autor"]
-            nueva_categoria = input(f"categoria ({inv["categoria"]}): ") or inv["categoria"]        
-            nuevo_precio = float(input(f"nuevo precio ({inv["precio"]}): "))
-            nueva_cantidad = int(input(f"nuevo stock ({inv["cantidad"]}): ")) 
+            nuevo_titulo = input(f"title ({inv["titulo"]}): ") or inv["titulo"]
+            nueva_autor= input(f"author ({inv["autor"]}): ") or inv["autor"]
+            nueva_categoria = input(f"category ({inv["categoria"]}): ") or inv["categoria"]        
+            nuevo_precio = (validar_numero(f"new price ({inv["precio"]}): "))
+            nueva_cantidad = (validar_numero(f"new stock ({inv["cantidad"]}): ")) 
             inv["titulo"]=nuevo_titulo
             inv["autor"]=nueva_autor
             inv["categoria"]=nueva_categoria
@@ -128,10 +125,10 @@ def actualizar_producto():
            
 
             print(f"ID: {inv["id"]} | title: {inv["titulo"]} | author: {inv["autor"]} | category: {inv["categoria"]} | price: {inv["precio"]} | amount stock: {inv["cantidad"]}")
-    print("Actualizado correctamente.")     
+    print("successfully updated")     
 
 def eliminar_producto():
-    numero = int(input("ID delete: "))
+    numero = (validar_numero("ID delete: "))
     for inv in inventario:
         if inv["id"] == numero:
             inventario.remove(inv)

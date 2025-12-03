@@ -1,5 +1,5 @@
 from gestion_inv import consultar,registrar_inventario,eliminar_producto,actualizar_producto,mostrar
-from consultas import registro_venta, mostrar_ventas, consult_sale,reporte_ingresos,reports_sales,reports_top
+from consultas import registro_venta, mostrar_ventas, consult_sale,reports_income,reports_sales,reports_top
 import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -28,7 +28,7 @@ def main():
 
 def inventory_menu():
     while True:
-        print("Welcome to the national bookstore\n")
+        print("\nWelcome to the national bookstore\n")
         print("1. Record inventory")
         print("2. Check inventory")
         print("3. Show inventory")
@@ -62,7 +62,7 @@ def report_menu():
 
         option=input("Enter option: ")
         if option =="1":
-            reporte_ingresos()
+            reports_income()
         elif option == "2":
             reports_sales()
         elif option == "3":
